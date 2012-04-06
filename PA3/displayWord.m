@@ -1,5 +1,14 @@
 function displayWord(wordIndex)
-% Displays the bitmaps 
+% displayWord( wordIndex )
+% 
+% Displays the bitmaps from the PA3Data.mat file, along with the
+% groundTruth character as a title.  Displays the word for the 
+% corresponding wordIndex.
+%
+% This script must be run in the directory containgin PA3Data.mat
+%
+% Based on code from Timothy Vaughan and Mihaly Barasz:
+% https://class.coursera.org/pgm/forum/thread?thread_id=967
 
 load('PA3Data.mat');
 numChars = length( allWords{wordIndex} );
