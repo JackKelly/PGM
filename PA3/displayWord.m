@@ -29,7 +29,7 @@ for charIndex = 1:numChars
     % because the .img matrix contains values which are 0 or 1;
     % but colour maps are indexed starting at 1.
 
-    % Format the image
+    % Format the current subplot
     axis equal;
     set(gca, 'XLim', [0.5 8.5], 'YLim', [0.5 16.5], 'XTick', [], 'YTick', []);
     title( char( allWords{wordIndex}(charIndex).groundTruth + 'a' - 1 ) );
