@@ -1,6 +1,6 @@
 function equal = VectorsEqual(A, B)
 % equal = VectorsEqual(A, B)
-% Returns true if vectors A and B are exactly
+% Returns true if vectors A and B are exactly equal (or both empty).
 
 if ~vectorsEqualNoSizeCheck( size(A), size(B) )
     equal = 0;
