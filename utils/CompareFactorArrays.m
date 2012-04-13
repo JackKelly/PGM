@@ -1,11 +1,12 @@
-function CompareFactorArrays( test, target )
-% CompareFactorArray( test, target )
+function success = CompareFactorArrays( test, target )
+% success = CompareFactorArray( test, target )
 
 n = length(test);
 
 if (min(size(test) == size(target)) == 0)
     disp('Test and Target arrays are of different sizes.');
     fprintf('Test size: %d*%d \nTarget size: %d*%d \n\n', size(test), size(target));
+    success = 0;
     return;
 end
 
@@ -23,8 +24,10 @@ if (min(results)==0)
     fprintf('%d factors failed, specifically factor(s): ', sum(results==0));
     fprintf('%2d,', find(results == 0));
     fprintf('\n\n');
+    success = 0;
 else
     fprintf('All %d factors passed! \n\n', n);
+    success = 1;
 end
     
 

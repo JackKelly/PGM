@@ -11,6 +11,7 @@ function pass = CompareVectors(test, target)
 
     tolerance  = 0.0001;
     comparison = abs( test - target ) < tolerance;
+    comparison = comparison | (test == target);
     pass = 1;
     if (min(comparison)==0)
         disp('******FAIL:************');
