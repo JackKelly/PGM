@@ -1,27 +1,35 @@
-function success = CompareFactors(test, target)
-% CompareFactors( test, target )
+function success = CompareFactors(test, target, verbose)
+% CompareFactors( test, target, verbose )
+
+    if(~exist('verbose','var'))
+        verbose = 0;
+    end
 
     passed = zeros(1,3);
     
-    fprintf('Comparing factors.  Target factor is for vars ');
-    fprintf('%2d,', target.var);
-    fprintf('\n\n');
+    if verbose
+        fprintf('Comparing factors.  Target factor is for vars ');
+        fprintf('%2d,', target.var);
+        fprintf('\n\n');
 
-    fprintf('  Comparing var... ');
+        fprintf('  Comparing var... ');
+    end
     passed(1) = CompareVectors(test.var, target.var);
-    printResult( passed(1) );
+    printResult( passed(1), verbose );
     
-    fprintf('  Comparing card...');
+    if verbose, fprintf('  Comparing card...'); end;
     passed(2) = CompareVectors(test.card, target.card);
-    printResult( passed(2) );
+    printResult( passed(2), verbose );
     
-    fprintf('  Comparing val... ');
+    if verbose, fprintf('  Comparing val... '); end;
     passed(3) = CompareVectors(test.val, target.val);
-    printResult( passed(3) );
+    printResult( passed(3), verbose );
     
     if (min(passed) == 1)
         success = 1;
-        fprintf('\nThis factor has passed all tests! \n');
+        if verbose
+            fprintf('\nThis factor has passed all tests! \n');
+        end
     else
         success = 0;
         fprintf('\n*******This factor has FAILED*****\n');
@@ -34,7 +42,11 @@ function success = CompareFactors(test, target)
     
 end
 
-function printResult( result )
+function printResult( result, verbose )
+    if verbose == 0
+        return
+    end
+    
     if (result)
         fprintf(' passed \n');
     end
