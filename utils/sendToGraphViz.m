@@ -39,8 +39,8 @@ function sendToGraphViz(name, G, F, size)
 %    sendToGraphViz('toyImageNet', G, F)
 
 
-outputFileName = strcat(name, '.gv');
-fid = fopen(outputFileName, 'w+');
+gvFileName = strcat(name, '.gv');
+fid = fopen(gvFileName, 'w+');
 
 fprintf(fid, 'graph %s { \n', name);
 fprintf(fid, '    rankdir=LR; \n');
@@ -80,17 +80,21 @@ fprintf(fid, '}\n');
 fclose(fid);
 
 imageFileName = strcat(name, '.png');
-[status, result] = system(['dot -Tpng ' outputFileName ' > ' imageFileName]);
+[status, result] = system(['dot -Tpng ' gvFileName ' > ' imageFileName]);
 
 if status == 0
     fprintf('dot ran successfully!\n')
     fprintf('There should now be a %s graphviz file\n and a %s image file in the current directory.\n\n'...
-        , outputFileName,  imageFileName);
+        , gvFileName,  imageFileName);
+    fprintf('Try copying-and-pasting the following URI into\n a web browser (might not work on Windows):\n');
+    fprintf('file://%s/%s\n', pwd, imageFileName);
 else
-    fprintf('ERROR: GraphViz failed.  Result: \n');
+    fprintf('ERROR: GraphViz failed.  GraphViz complained that: \n');
     disp(result);
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Helper functions:
 function label = edgeLabel(sourceIndex, destIndex)
     if ~isfield(G,'var2factors') || ~exist('F','var'), label=''; return; end;
         
