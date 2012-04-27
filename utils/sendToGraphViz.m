@@ -1,29 +1,54 @@
-function sendToGraphViz(name, G, F)
-% sendToGraphViz(name, G, F)
+function sendToGraphViz(name, G, F, size)
+% sendToGraphViz(name, G, F, size)
 %
-% Inputs:
+% INPUTS:
 %
-% name - First part of output file name. Do not append a suffix. 
+% name - (required) First part of output file name. Do not append a suffix. 
 %        sendToGraphViz will append '.gv'
 %
-% G    - a graph data structure.  Must contain at least a .edges matrix.
-%        Can optionally contain a var2factors cell array.
+% G    - a graph data structure with the following fields:
+%        .edges matrix (required)
+%        .var2factors cell array (optional)
 %
-% F    - a struct array of factors (optional)
+% F    - (optional) a struct array of factors.
+%        If G includes a .var2factors cell array then F must by supplied
+%        and visa-versa.
+%
+% size - (optional) a string of the form "8,5" describing the max size of
+%        the generated image file.  Defaults to "8,5"
 %
 % Writes a name.gv dot file and processes it with graphviz to produce
 % a name.png image file.
 %
-% THIS SCRIPT REQUIRES THAT GRAPHVIZ IS INSTALLED!
+% THIS SCRIPT REQUIRES GRAPHVIZ!
 % http://www.graphviz.org/
 % To install on Ubuntu, type: sudo apt-get install graphviz
+%
+% ------------------------
+%
+% VERY SIMPLE EXAMPLE:
+%    T.edges = [1 0; 0 1];  % create a simple edges matrix
+%    sentToGraphViz('simple', T);
+%
+% This will produce a 'simple.gv' do file and a 'simple.png' image file.
+%
+% ------------------------
+%
+% MORE INTERESTING EXAMPLE:
+%    [G, F] = ConstructToyNetwork( 1.0, 0.1 ); % from PA5
+%    sendToGraphViz('toyImageNet', G, F)
+
 
 outputFileName = strcat(name, '.gv');
 fid = fopen(outputFileName, 'w+');
 
 fprintf(fid, 'graph %s { \n', name);
 fprintf(fid, '    rankdir=LR; \n');
-fprintf(fid, '    size="8,5"; \n'); % modify size if required
+
+if ~exist('size', 'var')
+    size = '8,5';
+end
+fprintf(fid, '    size="%s"; \n', size); % modify size if required
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % output node names (if they exist)
@@ -32,13 +57,13 @@ if isfield(G, 'names') % Does G have a 'names' field?
     for i=1:length(G.names)
         fprintf(fid, '%d [label="%s \\n%s"]; \n ', i, G.names{i}, nodeLabel(i)); 
     end
-    % fprintf(fid, ';\n');
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % output undirected edges
 pairs = [];
-for i=1:size(G.edges, 1)
+numNodes = length(G.edges);
+for i=1:numNodes
     neighbours = find(G.edges(i,:));
     for neighbour = neighbours
         if isempty(pairs) || ...
