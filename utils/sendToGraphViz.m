@@ -23,6 +23,7 @@ fid = fopen(outputFileName, 'w+');
 
 fprintf(fid, 'graph %s { \n', name);
 fprintf(fid, '    rankdir=LR; \n');
+fprintf(fid, '    size="8,5"; \n'); % modify size if required
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % output node names (if they exist)

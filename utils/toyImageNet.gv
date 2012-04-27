@@ -1,5 +1,6 @@
 graph toyImageNet { 
     rankdir=LR; 
+    size="8,5"; 
     node [shape = circle]; 
 1 [label="pixel1 \n1 0.4\n2 0.6\n"]; 
  2 [label="pixel2 \n1 0.4\n2 0.6\n"]; 
