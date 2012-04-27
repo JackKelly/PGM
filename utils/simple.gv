@@ -1,0 +1,4 @@
+graph simple { 
+    rankdir=LR; 
+    1 -- 2 [label=""]; 
+}
