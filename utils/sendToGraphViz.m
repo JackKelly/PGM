@@ -13,6 +13,10 @@ function sendToGraphViz(name, G, F)
 %
 % Writes a name.gv dot file and processes it with graphviz to produce
 % a name.png image file.
+%
+% THIS SCRIPT REQUIRES THAT GRAPHVIZ IS INSTALLED!
+% http://www.graphviz.org/
+% To install on Ubuntu, type: sudo apt-get install graphviz
 
 outputFileName = strcat(name, '.gv');
 fid = fopen(outputFileName, 'w+');
