@@ -61,17 +61,13 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % output undirected edges
-pairs = [];
 numNodes = length(G.edges);
 for i=1:numNodes
     neighbours = find(G.edges(i,:));
     for neighbour = neighbours
-        if isempty(pairs) || ...
-           max(ismember(pairs, [neighbour i], 'rows'))==0  % check we haven't done this edge already
-           
+        if i <= neighbour % don't double-count
             fprintf(fid, '    %d -- %d [label="%s"]; \n', i, neighbour, edgeLabel(i, neighbour));
         end
-        pairs = [pairs; i neighbour];
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
