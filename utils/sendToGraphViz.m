@@ -50,12 +50,16 @@ if ~exist('size', 'var')
 end
 fprintf(fid, '    size="%s"; \n', size); % modify size if required
 
+if ~exist('F', 'var')
+    F = [];
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % output node names (if they exist)
 if isfield(G, 'names') % Does G have a 'names' field?
     fprintf(fid, '    node [shape = circle]; \n');
     for i=1:length(G.names)
-        fprintf(fid, '%d [label="%s \\n%s"]; \n ', i, G.names{i}, nodeLabel(i)); 
+        fprintf(fid, '%d [label="%s \\n%s"]; \n ', i, G.names{i}, nodeLabel(i, G, F)); 
     end
 end
 
@@ -66,7 +70,7 @@ for i=1:numNodes
     neighbours = find(G.edges(i,:));
     for neighbour = neighbours
         if i <= neighbour % don't double-count
-            fprintf(fid, '    %d -- %d [label="%s"]; \n', i, neighbour, edgeLabel(i, neighbour));
+            fprintf(fid, '    %d -- %d [label="%s"]; \n', i, neighbour, edgeLabel(i, neighbour, G, F));
         end
     end
 end
@@ -89,10 +93,12 @@ else
     disp(result);
 end
 
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Helper functions:
-function label = edgeLabel(sourceIndex, destIndex)
-    if ~isfield(G,'var2factors') || ~exist('F','var'), label=''; return; end;
+function label = edgeLabel(sourceIndex, destIndex, G, F)
+    if ~isfield(G,'var2factors') || ~exist('F','var') || isempty(F), label=''; return; end;
         
     factors = G.var2factors{sourceIndex};
     for factor = factors
@@ -102,11 +108,11 @@ function label = edgeLabel(sourceIndex, destIndex)
     end
 end
 
-function label = nodeLabel(node)
-    if ~isfield(G,'var2factors') || ~exist('F', 'var'), label=''; return; end;
+function label = nodeLabel(node, G, F)
+    label = '';
+    if ~isfield(G,'var2factors') || ~exist('F', 'var') || isempty(F), return; end;
     
     factors = G.var2factors{node};
-    label = '';
     for factor = factors
         if isequal(F(factor).var, node)
             for a = 1:F(factor).card
@@ -114,6 +120,4 @@ function label = nodeLabel(node)
             end
         end
     end    
-end
-
 end
