@@ -98,11 +98,13 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Helper functions:
 function label = edgeLabel(sourceIndex, destIndex, G, F)
-    if ~isfield(G,'var2factors') || ~exist('F','var') || isempty(F), label=''; return; end;
+    label='';
+    if ~isfield(G,'var2factors') || ~exist('F','var') || isempty(F), return; end;
         
     factors = G.var2factors{sourceIndex};
     for factor = factors
-        if isequal(F(factor).var, [sourceIndex destIndex])
+        if isequal(F(factor).var, [sourceIndex destIndex]) ...
+                || isequal(F(factor).var, [destIndex sourceIndex])
             label = sprintf('%1.1f\\n', F(factor).val);
         end
     end
